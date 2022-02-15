@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Azure.Functions.Worker.Configuration;
 
-namespace league_stats_tracker
+namespace Drumstepp.FetchMatches
 {
     public class Program
     {
