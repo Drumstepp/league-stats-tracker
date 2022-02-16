@@ -1,5 +1,7 @@
 using System;
-namespace Drumstepp.FetchMatches.Models
+using System.Collections.Generic;
+
+namespace Drumstepp.Models
 {
     public class Match
     {
@@ -10,5 +12,7 @@ namespace Drumstepp.FetchMatches.Models
         public string GameMode { get; set; }
         public int TimeSpentCCD { get; set; }
         public bool Won { get; set; }
+
+        public ICollection<PlayerMatch> PlayerMatches { get; set; }
     }
 }

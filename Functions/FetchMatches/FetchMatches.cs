@@ -21,7 +21,8 @@ namespace Drumstepp.FetchMatches
         [Function("FetchMatches")]
         public void Run([TimerTrigger("*/5 * * * * *")] MyInfo myTimer)
         {
-            _matchService.GetMatchHistory("");
+            var x = _matchService.GetMatch("1");
+            _logger.LogInformation(x.ToString());
             
         }
     }
