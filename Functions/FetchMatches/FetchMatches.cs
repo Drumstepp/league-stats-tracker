@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Drumstepp.FetchMatches.Interfaces;
+using System.Threading.Tasks;
+using Drumstepp.Models;
 
 namespace Drumstepp.FetchMatches
 {
@@ -10,19 +12,26 @@ namespace Drumstepp.FetchMatches
     {
         private readonly ILogger _logger;
         private readonly IMatchService _matchService;
+        private readonly IRiotApiService _riotApiService;
         private readonly ICollection<String> TrackedSummoners = new List<String> {"0n02GnQsUl40poJ9ewCHc5wwRD2YdJ9s6sV-p7qhPOarc5YVru8gd_Dd8EGkZwnxiTBQeoX6wohXRQ"};
 
-        public FetchMatches(ILoggerFactory loggerFactory, IMatchService matchService)
+        public FetchMatches(ILoggerFactory loggerFactory, IMatchService matchService, IRiotApiService riotApiService)
         {
             _logger = loggerFactory.CreateLogger<FetchMatches>();
             _matchService = matchService;
+            _riotApiService = riotApiService;
         }
 
         [Function("FetchMatches")]
-        public void Run([TimerTrigger("*/5 * * * * *")] MyInfo myTimer)
+        public async Task Run([TimerTrigger("*/5 * * * * *")] MyInfo myTimer)
         {
-            var x = _matchService.GetMatch("1");
-            _logger.LogInformation(x.ToString());
+            ICollection<String> matchList = await _riotApiService.GetMatchesByPUUID("0n02GnQsUl40poJ9ewCHc5wwRD2YdJ9s6sV-p7qhPOarc5YVru8gd_Dd8EGkZwnxiTBQeoX6wohXRQ");
+            foreach (var match in matchList) {
+                if (!await _matchService.GetMatchExists(match)) {
+                    Match m = await _riotApiService.GetMatch(match);
+                    await _matchService.SaveMatch(m);
+                }
+            }
             
         }
     }

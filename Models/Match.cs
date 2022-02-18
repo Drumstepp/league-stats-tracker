@@ -10,8 +10,6 @@ namespace Drumstepp.Models
         public DateTime GameStart { get; set; }
         public DateTime GameEnd { get; set; }
         public string GameMode { get; set; }
-        public int TimeSpentCCD { get; set; }
-        public bool Won { get; set; }
 
         public ICollection<PlayerMatch> PlayerMatches { get; set; }
     }

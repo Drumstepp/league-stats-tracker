@@ -20,9 +20,11 @@ namespace league_stats_tracker
                 .ConfigureFunctionsWorkerDefaults()
                 .ConfigureServices(s => {
                     s.AddSingleton<IMatchService, MatchService>();
+                    s.AddSingleton<IRiotApiService, RiotApiService>();
                     s.AddDbContext<LolContext>(options => {
                         options.UseSqlServer(Environment.GetEnvironmentVariable("DbConn"));
                     });
+                    s.AddHttpClient();
                     s.AddDatabaseDeveloperPageExceptionFilter();
                 })
                 .Build();
