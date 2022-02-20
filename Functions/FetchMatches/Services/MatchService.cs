@@ -21,27 +21,30 @@ namespace Drumstepp.FetchMatches.Services
             return null;
         }
 
-        public Match GetMatch(string matchId)
+        public async Task<Match> GetMatch(string matchId)
         {
-            var y = _context.PlayerMatches.Where(x => x.Player.Name == "Drumstepp").ToList();
-            return _context.Matches.Where(x => x.Id == 1).FirstOrDefault();
+            return await _context.Matches.FirstOrDefaultAsync(x => x.MatchId == matchId);
         }
         public async Task<bool> GetMatchExists(string matchId) 
         {
             return await _context.Matches.AnyAsync(x => x.MatchId == matchId);
         }
 
-        public async Task SaveMatch(Match match) {
+        public async Task<Match> AddMatch(Match match) {
             await _context.Matches.AddAsync(match);
             await _context.SaveChangesAsync();
-            return;
+            return match;
+        }        
+        public async Task UpdateMatch(Match match) {
+            var dbMatch = await _context.Matches.SingleOrDefaultAsync(x => x.Id == match.Id);
+            dbMatch = match;
+            await _context.SaveChangesAsync();
         }
-
         
-        public ICollection<String> GetMatchesNotInDb(ICollection<String> matchIds)
+        public async Task<ICollection<String>> GetMatchesNotInDb(ICollection<String> matchIds)
         {
             // Fetches matches in database that match the matchIds
-            var dbList = _context.Matches.Where(x => matchIds.Contains(x.MatchId));   
+            var dbList = await _context.Matches.Where(x => matchIds.Contains(x.MatchId)).ToListAsync();   
             // Returns matches that are NOT in the database
             return matchIds.Where(x => dbList.All(y => y.MatchId != x)).ToArray();
         }

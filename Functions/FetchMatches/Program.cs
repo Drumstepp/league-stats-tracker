@@ -21,6 +21,8 @@ namespace league_stats_tracker
                 .ConfigureServices(s => {
                     s.AddSingleton<IMatchService, MatchService>();
                     s.AddSingleton<IRiotApiService, RiotApiService>();
+                    s.AddSingleton<IPlayerService, PlayerService>();
+                    s.AddSingleton<IPlayerMatchService, PlayerMatchService>();
                     s.AddDbContext<LolContext>(options => {
                         options.UseSqlServer(Environment.GetEnvironmentVariable("DbConn"));
                     });

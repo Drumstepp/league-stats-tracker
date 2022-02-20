@@ -8,9 +8,10 @@ namespace Drumstepp.FetchMatches.Interfaces
     public interface IMatchService
     {
         public ICollection<String> GetMatchHistory(string puuid);
-        public Match GetMatch(string matchId);
-        public ICollection<String> GetMatchesNotInDb(ICollection<String> matchIds);
+        public Task<Match> GetMatch(string matchId);
+        public Task<ICollection<String>> GetMatchesNotInDb(ICollection<String> matchIds);
         public Task<bool> GetMatchExists(string matchId);
-        public Task SaveMatch(Match match);
+        public Task<Match> AddMatch (Match match);
+        public Task UpdateMatch(Match match);
     }
 }
