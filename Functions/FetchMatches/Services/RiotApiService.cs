@@ -24,9 +24,9 @@ namespace Drumstepp.FetchMatches.Services
             _client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("RiotApiUrl"));
         }
 
-        public async Task<ICollection<String>> GetMatchesByPUUID(string PUUID) 
+        public async Task<ICollection<String>> GetMatchesByPUUID(string PUUID, int count = 20, int start = 0) 
         {
-            return await _client.GetFromJsonAsync<String[]>($"/lol/match/v5/matches/by-puuid/{PUUID}/ids");
+            return await _client.GetFromJsonAsync<String[]>($"/lol/match/v5/matches/by-puuid/{PUUID}/ids?count={count}&start={start}");
         }
 
         public async Task<RiotMatch> GetRiotMatch(string matchId)

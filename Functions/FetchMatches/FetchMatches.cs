@@ -6,6 +6,7 @@ using Drumstepp.FetchMatches.Interfaces;
 using System.Threading.Tasks;
 using Drumstepp.Models;
 using System.Linq;
+using System.Threading;
 
 namespace Drumstepp.FetchMatches
 {
@@ -31,7 +32,7 @@ namespace Drumstepp.FetchMatches
         }
 
         [Function("FetchMatches")]
-        public async Task Run([TimerTrigger("*/5 * * * * *")] MyInfo myTimer)
+        public async Task Run([TimerTrigger("* */10 * * * *")] MyInfo myTimer)
         {
             var playerList = await _playerService.GetPlayers();
             foreach (var player in playerList)
@@ -55,19 +56,25 @@ namespace Drumstepp.FetchMatches
                         var matchAdded = await _matchService.AddMatch(m);
 
                         var participantInfo = rm.Info.Participants.FirstOrDefault(x => x.PUUID == player.PUUID);
-                        PlayerMatch pm = new PlayerMatch
+                        try
                         {
-                            PositionPlayed = Enum.Parse<PositionPlayed>(participantInfo.IndividualPosition),
-                            SidePlayed = participantInfo.TeamId == 100 ? SidePlayed.BLUE : SidePlayed.RED,
-                            TimeSpentCCD = participantInfo.TotalTimeCCDealt,
-                            Won = participantInfo.Win,
-                            ChampionName = participantInfo.ChampionName,
-                            Match = matchAdded,
-                            Player = player
-                        };
-
-                        var addedPm = await _playerMatchService.AddPlayerMatch(pm);
-                        var y = "";
+                            PlayerMatch pm = new PlayerMatch
+                            {
+                                PositionPlayed = Enum.Parse<PositionPlayed>(String.IsNullOrWhiteSpace(participantInfo.IndividualPosition) ? "Invalid" : participantInfo.IndividualPosition),
+                                SidePlayed = participantInfo.TeamId == 100 ? SidePlayed.BLUE : SidePlayed.RED,
+                                TimeSpentCCD = participantInfo.TotalTimeCCDealt,
+                                Won = participantInfo.Win,
+                                ChampionName = participantInfo.ChampionName,
+                                Match = matchAdded,
+                                Player = player
+                            };
+                            await _playerMatchService.AddPlayerMatch(pm);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError($"Error while creating PlayerMatch object. Player is {player.Name}, matchId is {matchId}, Position is {participantInfo.IndividualPosition}");
+                            throw;
+                        }
 
                     }
                     else if (!await _playerMatchService.GetPlayerMatchExists(matchId, player.PUUID))
@@ -75,18 +82,27 @@ namespace Drumstepp.FetchMatches
                         RiotMatch rm = await _riotApiService.GetRiotMatch(matchId);
                         Match m = await _matchService.GetMatch(matchId);
                         var participantInfo = rm.Info.Participants.FirstOrDefault(x => x.PUUID == player.PUUID);
-                        PlayerMatch pm = new PlayerMatch
+                        try
                         {
-                            PositionPlayed = Enum.Parse<PositionPlayed>(participantInfo.IndividualPosition),
-                            SidePlayed = participantInfo.TeamId == 100 ? SidePlayed.BLUE : SidePlayed.RED,
-                            TimeSpentCCD = participantInfo.TotalTimeCCDealt,
-                            Won = participantInfo.Win,
-                            ChampionName = participantInfo.ChampionName,
-                            Match = m,
-                            Player = player
-                        };
-                        await _playerMatchService.AddPlayerMatch(pm);
+                            PlayerMatch pm = new PlayerMatch
+                            {
+                                PositionPlayed = Enum.Parse<PositionPlayed>(String.IsNullOrWhiteSpace(participantInfo.IndividualPosition) ? "Invalid" : participantInfo.IndividualPosition),
+                                SidePlayed = participantInfo.TeamId == 100 ? SidePlayed.BLUE : SidePlayed.RED,
+                                TimeSpentCCD = participantInfo.TotalTimeCCDealt,
+                                Won = participantInfo.Win,
+                                ChampionName = participantInfo.ChampionName,
+                                Match = m,
+                                Player = player
+                            };
+                            await _playerMatchService.AddPlayerMatch(pm);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError($"Error while creating PlayerMatch object. Player is {player.Name}, matchId is {matchId}, Position is {participantInfo.IndividualPosition}");
+                            throw;
+                        }
                     }
+
 
 
                 }
