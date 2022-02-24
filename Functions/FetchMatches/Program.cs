@@ -9,6 +9,7 @@ using Drumstepp.FetchMatches.Services;
 using Drumstepp.Data;
 using System;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace league_stats_tracker
 {
@@ -25,6 +26,7 @@ namespace league_stats_tracker
                     s.AddSingleton<IPlayerMatchService, PlayerMatchService>();
                     s.AddDbContext<LolContext>(options => {
                         options.UseSqlServer(Environment.GetEnvironmentVariable("DbConn"));
+                        options.ConfigureWarnings(c => c.Log((RelationalEventId.CommandExecuting, LogLevel.Debug)));
                     });
                     s.AddHttpClient();
                     s.AddDatabaseDeveloperPageExceptionFilter();

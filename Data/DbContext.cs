@@ -19,5 +19,6 @@ namespace Drumstepp.Data
             modelBuilder.Entity<PlayerMatch>().ToTable("PlayerMatch");
             modelBuilder.Entity<Player>().ToTable("Player");
         }
+
     }
 }
