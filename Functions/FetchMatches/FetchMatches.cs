@@ -44,7 +44,8 @@ namespace Drumstepp.FetchMatches
                     if (!await _matchService.GetMatchExists(matchId))
                     {
                         RiotMatch rm = await _riotApiService.GetRiotMatch(matchId);
-
+                        if (rm.Info.GameMode == "PRACTICETOOL") return;
+                        
                         Match m = new Match
                         {
                             MatchId = matchId,
