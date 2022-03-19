@@ -3,9 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Azure.Functions.Worker.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Drumstepp.FetchMatches.Interfaces;
+using Drumstepp.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Drumstepp.FetchMatches.Services;
+using Drumstepp.Common.Services;
 using Drumstepp.Data;
 using System;
 using Microsoft.Extensions.Logging;
@@ -32,7 +32,7 @@ namespace league_stats_tracker
                     s.AddDatabaseDeveloperPageExceptionFilter();
                 })
                 .ConfigureLogging(builder => {
-                    builder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Debug);
+                    builder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None);
                 })
                 .Build();
             CreateDbIfNotExists(host);

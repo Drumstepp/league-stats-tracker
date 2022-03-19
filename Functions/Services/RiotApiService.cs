@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Drumstepp.FetchMatches.Interfaces;
+using Drumstepp.Common.Interfaces;
 using Drumstepp.Models;
 using Drumstepp.Data;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Text.Json;
 using System.Runtime.CompilerServices;
 using System.Net.Http.Json;
 
-namespace Drumstepp.FetchMatches.Services
+namespace Drumstepp.Common.Services
 {
     public class RiotApiService : IRiotApiService
     {

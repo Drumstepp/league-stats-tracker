@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Drumstepp.FetchMatches.Interfaces;
+using Drumstepp.Common.Interfaces;
 using System.Threading.Tasks;
 using Drumstepp.Models;
 using System.Linq;
@@ -34,6 +34,7 @@ namespace Drumstepp.FetchMatches
         [Function("FetchMatches")]
         public async Task Run([TimerTrigger("* */10 * * * *", RunOnStartup = false)] MyInfo myTimer)
         {
+            _logger.LogInformation($"Timer last fired at: " + myTimer.ScheduleStatus.Last);
             var playerList = await _playerService.GetPlayers();
             foreach (var player in playerList)
             {
