@@ -31,6 +31,9 @@ namespace league_stats_tracker
                     s.AddHttpClient();
                     s.AddDatabaseDeveloperPageExceptionFilter();
                 })
+                .ConfigureLogging(builder => {
+                    builder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Debug);
+                })
                 .Build();
             CreateDbIfNotExists(host);
             host.Run();

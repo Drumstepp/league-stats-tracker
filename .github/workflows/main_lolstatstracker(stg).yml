@@ -37,6 +37,11 @@ jobs:
         id: fa
         with:
           app-name: 'lolstatstracker'
-          slot-name: 'stg'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D48F47F3DE7345FF939D6372493397E7 }}
+
+
+
+
+
+          #az functionapp deployment slot swap -n lolstatstracker -g league-stats-tracker --slot stg --target-slot production
