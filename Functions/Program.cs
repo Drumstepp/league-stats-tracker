@@ -20,11 +20,11 @@ namespace league_stats_tracker
             var host = new HostBuilder()
                 .ConfigureFunctionsWorkerDefaults()
                 .ConfigureServices(s => {
-                    s.AddSingleton<IMatchService, MatchService>();
-                    s.AddSingleton<IRiotApiService, RiotApiService>();
-                    s.AddSingleton<IPlayerService, PlayerService>();
-                    s.AddSingleton<IPlayerMatchService, PlayerMatchService>();
-                    s.AddDbContext<LolContext>(options => {
+                    s.AddScoped<IMatchService, MatchService>();
+                    s.AddScoped<IRiotApiService, RiotApiService>();
+                    s.AddScoped<IPlayerService, PlayerService>();
+                    s.AddScoped<IPlayerMatchService, PlayerMatchService>();
+                    s.AddPooledDbContextFactory<LolContext>(options => {
                         options.UseSqlServer(Environment.GetEnvironmentVariable("DbConn"));
                         options.ConfigureWarnings(c => c.Log((RelationalEventId.CommandExecuting, LogLevel.Debug)));
                     });
