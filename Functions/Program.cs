@@ -24,7 +24,7 @@ namespace league_stats_tracker
                     s.AddScoped<IRiotApiService, RiotApiService>();
                     s.AddScoped<IPlayerService, PlayerService>();
                     s.AddScoped<IPlayerMatchService, PlayerMatchService>();
-                    s.AddPooledDbContextFactory<LolContext>(options => {
+                    s.AddDbContextPool<LolContext>(options => {
                         options.UseSqlServer(Environment.GetEnvironmentVariable("DbConn"));
                         options.ConfigureWarnings(c => c.Log((RelationalEventId.CommandExecuting, LogLevel.Debug)));
                     });

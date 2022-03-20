@@ -32,7 +32,7 @@ namespace Drumstepp.FetchMatches
         }
 
         [Function("FetchMatches")]
-        public async Task Run([TimerTrigger("* */10 * * * *", RunOnStartup = false)] MyInfo myTimer)
+        public async Task Run([TimerTrigger("0 */10 * * * *")] MyInfo myTimer)
         {
             _logger.LogInformation($"Timer last fired at: " + myTimer.ScheduleStatus.Last);
             var playerList = await _playerService.GetPlayers();
