@@ -21,6 +21,7 @@ namespace league_stats_tracker
                 .ConfigureFunctionsWorkerDefaults()
                 .ConfigureServices(s => {
                     s.AddScoped<IMatchService, MatchService>();
+                    s.AddScoped<IChartDataService, ChartDataService>();
                     s.AddScoped<IRiotApiService, RiotApiService>();
                     s.AddScoped<IPlayerService, PlayerService>();
                     s.AddScoped<IPlayerMatchService, PlayerMatchService>();
@@ -32,7 +33,7 @@ namespace league_stats_tracker
                     s.AddDatabaseDeveloperPageExceptionFilter();
                 })
                 .ConfigureLogging(builder => {
-                    builder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None);
+                    //builder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None);
                 })
                 .Build();
             CreateDbIfNotExists(host);
