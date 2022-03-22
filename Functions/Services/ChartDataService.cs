@@ -41,7 +41,7 @@ namespace Drumstepp.Common.Services
             int redSideGames = dbChartData.Count(x => x.SidePlayed == SidePlayed.RED);
             return new ChartData
             {
-                Labels = new String[] {"Red", "Blue"},
+                Labels = new String[] {$"Red ({redSideGames})", $"Blue ({blueSideGames})"},
                 Datasets = new ChartDataSets[] 
                 {
                     new ChartDataSets 
@@ -55,6 +55,7 @@ namespace Drumstepp.Common.Services
                 }
             };
         }
+        
 
     }
 }
