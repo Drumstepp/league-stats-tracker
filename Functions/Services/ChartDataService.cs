@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Drumstepp.Common.Interfaces;
+using Drumstepp.Common;
 using Drumstepp.Models;
 using Drumstepp.Data;
 using System.Linq;
@@ -55,7 +56,44 @@ namespace Drumstepp.Common.Services
                 }
             };
         }
+
+        public ChartData GetGameTypesPlayed(ICollection<DbChartData> dbChartData) 
+        {   
+
+            List<Tuple<String, int>> gameTypeCounts = 
+            dbChartData.GroupBy(x => x.GameMode)
+            .Select(cl => new Tuple<string, int>(cl.First().GameMode, cl.Count()))
+            .ToList();
+
+            // https://stackoverflow.com/questions/11120840/hash-string-into-rgb-color
+            var labels = new List<String> {};
+            var data = new List<int> {};          
+            var colors = new List<String> {};
         
+
+            gameTypeCounts.ForEach(x => {
+                labels.Add(x.Item1);
+                data.Add(x.Item2);
+                colors.Add(x.Item1.ToRgbString());
+            });
+
+            return new ChartData
+            {
+                Labels = labels.ToArray(),
+                Datasets = new ChartDataSets[] 
+                {
+                    new ChartDataSets 
+                    {
+                        Label = "Games By Mode Played",
+                        Data = data.ToArray(),
+                        BackgroundColor = colors.ToArray(),
+                        BorderColor = colors.ToArray(),
+                        BorderWidth = 1
+                    }
+                }
+                
+            };
+        }
 
     }
 }
