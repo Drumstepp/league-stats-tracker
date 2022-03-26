@@ -42,6 +42,7 @@ namespace Drumstepp.GetChartData
             response.Headers.Add("Content-Type", "application/json");
             var json = JsonSerializer.Serialize(new ChartViewData { SideData = sidesPlayed, GameTypeData = gameTypesPlayed,  ChampionData = championsPlayed}, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             await response.WriteStringAsync(json);
+            
 
             return response;
         }
