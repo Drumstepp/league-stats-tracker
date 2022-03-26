@@ -36,10 +36,11 @@ namespace Drumstepp.GetChartData
             ICollection<DbChartData> dbChartData = await _chartDataService.GetDbChartDatas(user);
             ChartData sidesPlayed = _chartDataService.GetSidesPlayed(dbChartData);
             ChartData gameTypesPlayed = _chartDataService.GetGameTypesPlayed(dbChartData);
+            ChartData championsPlayed = _chartDataService.GetChampionsPlayed(dbChartData);
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json");
-            var json = JsonSerializer.Serialize(new ChartViewData { SideData = sidesPlayed, GameTypeData = gameTypesPlayed }, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            var json = JsonSerializer.Serialize(new ChartViewData { SideData = sidesPlayed, GameTypeData = gameTypesPlayed,  ChampionData = championsPlayed}, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             await response.WriteStringAsync(json);
 
             return response;

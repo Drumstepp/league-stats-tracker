@@ -7,6 +7,7 @@ using Drumstepp.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Drumstepp.Common.Services
 {
@@ -94,6 +95,45 @@ namespace Drumstepp.Common.Services
                 
             };
         }
+
+        public ChartData GetChampionsPlayed(ICollection<DbChartData> dbChartData) 
+        {   
+
+            List<Tuple<String, int>> championCounts = 
+            dbChartData.GroupBy(x => x.ChampionName)
+            .Select(ch => new Tuple<String, int>(ch.First().ChampionName, ch.Count()))
+            .ToList();
+
+            var labels = new List<String> {};
+            var data = new List<int> {};          
+            var colors = new List<String> {};
+        
+
+            championCounts.ForEach(x => {
+                labels.Add(x.Item1);
+                data.Add(x.Item2);
+                colors.Add(x.Item1.ToRgbString());
+            });
+
+            return new ChartData
+            {
+                Labels = labels.ToArray(),
+                Datasets = new ChartDataSets[] 
+                {
+                    new ChartDataSets 
+                    {
+                        Label = "Games By Champions Played",
+                        Data = data.ToArray(),
+                        BackgroundColor = colors.ToArray(),
+                        BorderColor = colors.ToArray(),
+                        BorderWidth = 1
+                    }
+                }
+                
+            };
+        }
+
+        
 
     }
 }
