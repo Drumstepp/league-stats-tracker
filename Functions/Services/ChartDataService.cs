@@ -64,6 +64,7 @@ namespace Drumstepp.Common.Services
             List<Tuple<String, int>> gameTypeCounts = 
             dbChartData.GroupBy(x => x.GameMode)
             .Select(cl => new Tuple<string, int>(cl.First().GameMode, cl.Count()))
+            .OrderByDescending(x => x.Item2)
             .ToList();
 
             // https://stackoverflow.com/questions/11120840/hash-string-into-rgb-color
@@ -102,6 +103,7 @@ namespace Drumstepp.Common.Services
             List<Tuple<String, int>> championCounts = 
             dbChartData.GroupBy(x => x.ChampionName)
             .Select(ch => new Tuple<String, int>(ch.First().ChampionName, ch.Count()))
+            .OrderByDescending(x => x.Item2)
             .ToList();
 
             var labels = new List<String> {};
